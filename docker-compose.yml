@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+
+  portainer:
+    build:
+      context: .
+      target: final
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    command: -H unix:///var/run/docker.sock
+    restart: always
+
+    environment:
+      - VIRTUAL_HOST=portainer.djesta.net
+      - VIRTUAL_PORT=9000
+
+    ports:
+      - 8000:8000
+      - 9000:9000
+      - 9443:9443
+
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./letsencrypt:/etc/letsencrypt
+      - ./portainer_data:/data
+
+volumes:
+  letsencrypt:
+  portainer_data:
